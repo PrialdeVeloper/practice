@@ -1,6 +1,6 @@
 window.fbAsyncInit = function() {
     FB.init({
-      appId      : '180666716023704',
+      appId      : '170160493603540',
       cookie     : true,
       xfbml      : true,
       version    : 'v2.11'
@@ -8,6 +8,15 @@ window.fbAsyncInit = function() {
     FB.AppEvents.logPageView();   
       
   };
+
+  function getAT(){
+    FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+    document.getElementById('try').innerHTML = response.authResponse.accessToken;  
+    window.location.href = "facebook.php?at="+response.authResponse.accessToken;
+    }
+});
+  }
 
 
     function getStat(){
@@ -29,9 +38,16 @@ window.fbAsyncInit = function() {
   });
     }
     function login(){
-      FB.login(function(response){
-        document.getElementById('try3').innerHTML = 'qwe';
-      });
+    FB.login(function(response) {
+    if (response.authResponse) {
+     console.log('Welcome!  Fetching your information.... ');
+     FB.api('/me', function(response) {
+       document.getElementById('try').innerHTML = response.name;
+     });
+    } else {
+     console.log('User cancelled login or did not fully authorize.');
+    }
+});
     }
 
   (function(d, s, id){
